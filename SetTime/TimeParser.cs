@@ -4,16 +4,12 @@ namespace SetTime
 {
     class TimeParser
     {
-        public SystemTime Get(string siteContent)
+        public SystemTime Get(string siteContent, string timeStartSearchPattern, string timeEndSearchPattern, string dateStartSearchPattern, string dateEndSearchPattern)
         {
-            const string timeStartSearchPattern = "<div class=\"time\" id=\"clock\">";
-            const string dateStartSearchPattern = "<div class=\"date\">";
-            const string endSearchPattern = "</div>";
-
             var timeStartIndex = siteContent.IndexOf(timeStartSearchPattern) + timeStartSearchPattern.Length;
-            var timeEndIndex = siteContent.IndexOf(endSearchPattern, timeStartIndex);
+            var timeEndIndex = siteContent.IndexOf(timeEndSearchPattern, timeStartIndex);
             var dateStartIndex = siteContent.IndexOf(dateStartSearchPattern) + dateStartSearchPattern.Length;
-            var dateEndIndex = siteContent.IndexOf(endSearchPattern, dateStartIndex);
+            var dateEndIndex = siteContent.IndexOf(dateEndSearchPattern, dateStartIndex);
 
             var time = siteContent.Substring(timeStartIndex, timeEndIndex - timeStartIndex);
             var date = siteContent.Substring(dateStartIndex, dateEndIndex - dateStartIndex);

@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace SetTime
 {
-    class TimeSetter
+	class TimeSetter
     {
         [DllImport("Kernel32.dll")]
         static extern uint GetLastError();
