@@ -10,7 +10,8 @@ namespace SetTime
 
 		static void Main(string[] args)
         {
-            var siteDownloader = new SiteDownloader();
+			var siteDownloader = new SocketSiteDownloader();
+			//var siteDownloader = new SiteDownloader();
 
 			if ((args.Length != 0) && (args.Length == 5))
 			{
@@ -39,7 +40,6 @@ namespace SetTime
 			var siteContent = siteDownloader.GetSiteContent(url);
 
 			var timeParser = new TimeParser();
-
 			var systemTime = timeParser.Get(siteContent, timeStartSearchPattern, timeEndSearchPattern, dateStartSearchPattern, dateEndSearchPattern);
 
             var timeSetter = new TimeSetter();

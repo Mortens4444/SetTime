@@ -4,8 +4,17 @@ namespace SetTime
 {
     class TimeParser
     {
-        public SystemTime Get(string siteContent, string timeStartSearchPattern, string timeEndSearchPattern, string dateStartSearchPattern, string dateEndSearchPattern)
-        {
+		public SystemTime Get(string siteContent, string timeStartSearchPattern, string timeEndSearchPattern, string dateStartSearchPattern, string dateEndSearchPattern)
+		{
+			var dateTimeToSystemTimeConverter = new DateTimeToSystemTimeConverter();
+
+			var siteLinesContent = siteContent.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+			if (siteLinesContent[1].StartsWith("Date: "))
+			{
+				var strDate = siteLinesContent[1].Replace("Date: ", String.Empty);
+				return dateTimeToSystemTimeConverter.Convert(DateTime.Parse(strDate));
+			}
+
             var timeStartIndex = siteContent.IndexOf(timeStartSearchPattern) + timeStartSearchPattern.Length;
             var timeEndIndex = siteContent.IndexOf(timeEndSearchPattern, timeStartIndex);
             var dateStartIndex = siteContent.IndexOf(dateStartSearchPattern) + dateStartSearchPattern.Length;
@@ -25,7 +34,6 @@ namespace SetTime
             var month = Convert.ToUInt16(dateParts[1]);
             var day = Convert.ToUInt16(dateParts[2]);
 
-            var dateTimeToSystemTimeConverter = new DateTimeToSystemTimeConverter();
             var dateTime = new DateTime(year, month, day, hour, minute, second);
             return dateTimeToSystemTimeConverter.Convert(dateTime);
         }

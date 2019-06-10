@@ -41,6 +41,7 @@
     <Compile Include="DateTimeToSystemTimeConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SocketSiteDownloader.cs" />
     <Compile Include="SiteDownloader.cs" />
     <Compile Include="SystemTime.cs" />
     <Compile Include="TimeParser.cs" />
