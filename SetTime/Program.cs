@@ -10,8 +10,7 @@ namespace SetTime
 
 		static void Main(string[] args)
         {
-			var siteDownloader = new SocketSiteDownloader();
-			//var siteDownloader = new SiteDownloader();
+			ISiteDownloader siteDownloader = new SocketSiteDownloader();
 
 			if ((args.Length != 0) && (args.Length == 5))
 			{
@@ -22,7 +21,7 @@ namespace SetTime
 				try
 				{
 					var content = File.ReadAllText(SettingsFile);
-					args = content.Split(';');
+					args = content.Split(new[] { ';', '\r', '\n' });
 				}
 				catch (Exception)
 				{
@@ -37,13 +36,29 @@ namespace SetTime
 			var dateStartSearchPattern = args.Length == 0 ? "<div class=\"date\">" : args[3];
 			var dateEndSearchPattern = args.Length == 0 ? "</div>" : args[4];
 
-			var siteContent = siteDownloader.GetSiteContent(url);
+            try
+            {
+				string siteContent;
+				try
+                {
+					siteDownloader = new SiteDownloader();
+					siteContent = siteDownloader.GetSiteContent(url);
+                }
+				catch
+				{
+					siteContent = siteDownloader.GetSiteContent(url);
+				}
 
-			var timeParser = new TimeParser();
-			var systemTime = timeParser.Get(siteContent, timeStartSearchPattern, timeEndSearchPattern, dateStartSearchPattern, dateEndSearchPattern);
+				var timeParser = new TimeParser();
+				var systemTime = timeParser.Get(siteContent, timeStartSearchPattern, timeEndSearchPattern, dateStartSearchPattern, dateEndSearchPattern);
 
-            var timeSetter = new TimeSetter();
-            timeSetter.Set(systemTime);
+				var timeSetter = new TimeSetter();
+				timeSetter.Set(systemTime);
+            }
+            catch (Exception ex)
+            {
+				MessageBox.Show(ex.Message, ex.GetType().ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            }
         }
     }
 }
